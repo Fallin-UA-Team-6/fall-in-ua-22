@@ -3,6 +3,6 @@
     "cleanUrls": true,
     "trailingSlash": false,
     "rewrites": [{
-        "source": "/:path*", "destination": "/api/:path*" 
+        "source": "/sf/:path*", "destination": "/api/:path*" 
     }]
 }
