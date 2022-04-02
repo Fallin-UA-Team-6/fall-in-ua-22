@@ -1,6 +1,7 @@
 import type {initializeApp} from "firebase/app";
 import type {Messaging} from "firebase/messaging";
 import {browser} from "$app/env"
+import type { Auth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyADP9htFQz-vYQcJltHecCCcis9una8tDA",
@@ -15,7 +16,10 @@ const firebaseConfig = {
 class FirebaseApp {
     appModule: typeof import("firebase/app")
     messageModule: typeof import("firebase/messaging")
-
+    store: typeof import('firebase/firestore')
+    authModule: typeof import("firebase/auth")
+    auth: Auth
+    
 
     app: ReturnType<typeof initializeApp>
     messaging: Messaging
@@ -24,6 +28,12 @@ class FirebaseApp {
         this.appModule = await import('firebase/app')
         if (!this.app) {
             this.app = this.appModule.initializeApp(firebaseConfig)
+        }
+        if (browser) {
+            this.store = await import('firebase/firestore')
+            this.authModule = await import("firebase/auth")
+            this.auth = this.authModule.initializeAuth(this.app)
+            
         }
     }
 

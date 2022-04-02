@@ -1,11 +1,12 @@
 <script lang="ts" context="module">
-    import supabase from '$lib/db';
-    import type { AuthChangeEvent, User } from '@supabase/supabase-js';
     import { writable } from 'svelte/store';
-    const user = writable<User | undefined>(supabase.auth.user());
-    supabase.auth.onAuthStateChange((event: AuthChangeEvent) => {
-        user.set(supabase.auth.user());
+    import {fire} from '$lib/firebase'
+    import type { User } from 'firebase/auth';
+    const user = writable<User | undefined>(fire.auth.currentUser);
+    fire.authModule.onAuthStateChanged(fire.auth, (event) => {
+        user.set(event)
     });
+    
 </script>
 
 {#if $user}
