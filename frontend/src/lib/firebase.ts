@@ -2,6 +2,8 @@ import type {initializeApp} from "firebase/app";
 import type {Messaging} from "firebase/messaging";
 import {browser} from "$app/env"
 import type { Auth } from "firebase/auth";
+import {mutableState} from "$lib/state";
+import type { Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyADP9htFQz-vYQcJltHecCCcis9una8tDA",
@@ -16,7 +18,9 @@ const firebaseConfig = {
 class FirebaseApp {
     appModule: typeof import("firebase/app")
     messageModule: typeof import("firebase/messaging")
-    store: typeof import('firebase/firestore')
+    storeModule: typeof import('firebase/firestore')
+    store: Firestore
+
     authModule: typeof import("firebase/auth")
     auth: Auth
     
@@ -30,26 +34,38 @@ class FirebaseApp {
             this.app = this.appModule.initializeApp(firebaseConfig)
         }
         if (browser) {
-            this.store = await import('firebase/firestore')
+            this.storeModule = await import('firebase/firestore')
+            this.store = this.storeModule.initializeFirestore(this.app, {})
+
             this.authModule = await import("firebase/auth")
             this.auth = this.authModule.initializeAuth(this.app)
-            
+
+            mutableState.update(ms => ({...ms, firestoreInitialized: true}))
         }
     }
 
     initializeMessaging = async () => {
+
+        const storeToken = async () => {
+            const token = await this.messageModule.getToken(this.messaging, {vapidKey: "BNrLsf72E_Rtqu1aMTg6aI_P4ZbBQHb0It5JY40Xbxl5taSZI8omJmmvKmniujp6m5gQzercjk5RWN3K8cafY_w"})
+            console.log(this.messageModule.onMessage(this.messaging, p => console.log({p})))
+        
+            console.log(token)
+        }
 
         window.addEventListener("message", console.log)
 
         this.messageModule = await import('firebase/messaging')
         this.messaging = this.messageModule.getMessaging(this.app)
 
+        if (this.auth.currentUser) {
+            await storeToken()
+        } else {
+            this.auth.onAuthStateChanged(() => {
 
-        // Initialize Messaging
-        const token = await this.messageModule.getToken(this.messaging, {vapidKey: "BNrLsf72E_Rtqu1aMTg6aI_P4ZbBQHb0It5JY40Xbxl5taSZI8omJmmvKmniujp6m5gQzercjk5RWN3K8cafY_w"})
-        console.log(this.messageModule.onMessage(this.messaging, p => console.log({p})))
-    
-        console.log(token)
+            })
+        }
+        
     }
 }
 

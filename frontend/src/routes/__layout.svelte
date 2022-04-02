@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+    import "class-validator"
     import type {FbApp} from "$lib/firebase";
     import {browser} from "$app/env";
     export async function load() {
