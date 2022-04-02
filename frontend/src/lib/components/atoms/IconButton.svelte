@@ -13,7 +13,7 @@
 
 <style lang="postcss">
 	button {
-		@apply flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-800;
+		@apply flex items-center justify-center flex-shrink-0 w-10 h-10 rounded hover:bg-gray-800;
 
 		&.nomargin {
 			@apply mt-0;

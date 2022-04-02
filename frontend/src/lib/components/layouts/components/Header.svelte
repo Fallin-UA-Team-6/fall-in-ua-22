@@ -1,5 +1,13 @@
+<script lang="ts">
+	import { Logo } from '$lib';
+	export let sidebarVisible: boolean;
+</script>
+
 <header>
-	<h1>Safety Ping</h1>
+	<div class="flex gap-2 items-center">
+		<span class="lg:hidden"><Logo on:click={() => sidebarVisible = true}/></span>
+		<h1>Safety Ping</h1>
+	</div>
 	<button> Logout </button>
 </header>
 
