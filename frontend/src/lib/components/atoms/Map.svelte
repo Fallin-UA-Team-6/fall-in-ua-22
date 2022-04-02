@@ -1,16 +1,31 @@
 <script lang="ts" context="module">
     import "leaflet/dist/leaflet.css"
+
+    /**
+     * type {require("leaflet")}
+     */
+    let leaflet
+    /**
+     * returns {require("leaflet")}
+     */
+    async function getLeaflet() {
+        if (!leaflet) {
+            leaflet = await import("leaflet")
+        }
+        return leaflet
+    }
 </script>
 
 <script lang="ts">
-    import * as L from "leaflet";
     import {onMount} from "svelte";
     import {browser} from "$app/env"
 
     export let coordinates: [number,number];
 
-    onMount(() => {
+    onMount(async () => {
         if (browser) {
+            const L = await getLeaflet()
+
             let map = L.map(el, {
                 maxZoom: 19,
                 trackResize: false,
