@@ -4,7 +4,6 @@
 	let username: string;
 
 	let mode: "signup" | "login" | "recover" = "login"
-	$: console.log(mode)
 </script>
 <CenteredCardLayout>
 	{#if mode === "login"}

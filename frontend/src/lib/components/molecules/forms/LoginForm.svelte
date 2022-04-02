@@ -14,11 +14,11 @@
     <Input label="Username" bind:value={username} />
     <Input type="password" label="Password" bind:value={password} />
 
-    <button type="button" class="btn btn-primary">Login</button>
+    <button type="button" class="btn btn-primary mt-2">Login</button>
     <!-- TODO: OAuth? -->
     <hr class="divider border-t-0 my-0"/>
 
-    <div class="btn-group">
+    <div class="btn-group mx-auto">
         <button type="button" class="btn btn-sm">Forgot Password</button>
         <button type="button" class="btn btn-sm" on:click={() => dispatch("mode", "signup")}>Sign Up</button>
     </div>
@@ -26,6 +26,6 @@
 
 <style lang="postcss">
     form {
-        @apply flex flex-col gap-4;
+        @apply flex flex-col gap-4 w-96;
     }
 </style>

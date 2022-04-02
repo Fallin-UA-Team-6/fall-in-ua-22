@@ -35,6 +35,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"daisyui": "^2.13.4"
+		"@types/leaflet": "^1.7.9",
+		"daisyui": "^2.13.4",
+		"leaflet": "^1.7.1",
+		"svelte-icons": "^2.1.0"
 	}
 }

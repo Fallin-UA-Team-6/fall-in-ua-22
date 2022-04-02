@@ -4,7 +4,7 @@
     export let type: "text" | "password" = "text";
 </script>
 
-<div class="form-control w-full max-w-xs">
+<div class="form-control w-full">
     <label class="label p-0 pb-1">
         <span class="label-text">{label}</span>
     </label>
@@ -17,6 +17,6 @@
 
 <style lang="postcss">
     input {
-        @apply input input-bordered w-full max-w-xs m-0
+        @apply input input-bordered w-full m-0
     }
 </style>
