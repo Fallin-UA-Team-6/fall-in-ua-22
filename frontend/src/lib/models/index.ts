@@ -1,25 +1,22 @@
-import type { User } from "firebase/auth";
-import type { DocumentReference } from "firebase/firestore";
-
+import type { User } from 'firebase/auth';
 
 export class CheckIn {
-    id: string;
-    timestamp: Date;
-    lat: number;
-    lon: number;
+	id: string;
+	timestamp: Date;
+	lat: number;
+	lon: number;
 }
 
 export class GroupMember {
-    user: User
-    latestCheckin: CheckIn
+	user: User;
+	latestCheckin: CheckIn;
 }
 
 export class Group {
-    id: string;
+	id: string;
 
-    members: Array<GroupMember>;
+	members: Array<GroupMember>;
 
-    name: string;
-    photoUrl: URL;
+	name: string;
+	photoUrl: URL;
 }
-
