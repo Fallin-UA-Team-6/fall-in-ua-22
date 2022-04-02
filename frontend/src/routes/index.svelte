@@ -1,2 +1,14 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    import {goto} from "$app/navigation"
+    import {onMount} from "svelte";
+    import supabase from "$lib/db"
+
+    onMount(() => {
+        const user = supabase.auth.user()
+        if (user) {
+            goto("/app")
+        } else {
+            goto("/login")
+        }
+    })
+</script>

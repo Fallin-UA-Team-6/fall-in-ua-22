@@ -4,7 +4,6 @@
 
 <main>
     <IconBar/>
-    <SubNav/>
     <Header/>
     <div class="overflow-auto bg-neutral p-6">
         <slot/>
@@ -16,7 +15,6 @@
         @apply w-screen h-screen grid max-h-screen;
 
         grid-template-rows: theme("spacing.16") 1fr;
-        grid-template-columns: theme("spacing.16") theme("spacing.56") 1fr;
-
+        grid-template-columns: theme("spacing.16") 1fr;
     }
 </style>

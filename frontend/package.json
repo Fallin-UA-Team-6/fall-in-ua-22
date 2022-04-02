@@ -36,8 +36,10 @@
 	"type": "module",
 	"dependencies": {
 		"@types/leaflet": "^1.7.9",
+		"@types/lodash.debounce": "^4.0.6",
 		"daisyui": "^2.13.4",
 		"leaflet": "^1.7.1",
+		"lodash.debounce": "^4.0.8",
 		"svelte-icons": "^2.1.0"
 	}
 }
