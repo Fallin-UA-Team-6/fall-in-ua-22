@@ -1,5 +1,6 @@
 <script lang="ts">
     import {DashboardLayout, Map, UserCard} from "$lib";
+import Modal from "$lib/components/atoms/Modal.svelte";
 </script>
 
 
@@ -43,4 +44,7 @@
             <div class="h-24 col-span-4 md:col-span-2 lg:col-span-1 bg-gray-700"></div>
         </div>
     </div>
+    <Modal visible id="5" title="Test Modal!">
+        Something
+    </Modal>
 </DashboardLayout>
