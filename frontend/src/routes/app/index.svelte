@@ -1,10 +1,5 @@
 <script lang="ts">
     import {DashboardLayout, Map, UserCard} from "$lib";
-
-
-
-    let shown: boolean;
-    let shown2: boolean;
 </script>
 
 
@@ -48,6 +43,4 @@
             <div class="h-24 col-span-4 md:col-span-2 lg:col-span-1 bg-gray-700"></div>
         </div>
     </div>
-    <!-- Component End  -->
-
 </DashboardLayout>

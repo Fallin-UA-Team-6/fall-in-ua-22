@@ -1,6 +1,20 @@
-<script>
+<script lang="ts" context="module">
+    import type {FbApp} from "$lib/firebase";
+    import {browser} from "$app/env";
+    export async function load() {
+        const fb: FbApp = await import("$lib/firebase").then(fb => fb.fire)
+        await fb.initialize()
+        if (browser) {
+            await fb.initializeMessaging()
+        }
+        return {props: {fb}}
+    }
+</script>
+
+<script lang="ts">
     import '../app.css';
     import GiClothespin from 'svelte-icons/gi/GiClothespin.svelte';
+    export let fb: FbApp
 </script>
 
 <slot/>
