@@ -57,7 +57,7 @@
 
 <style lang="postcss">
 	h2 {
-		@apply text-lg text-primary-content font-bold mb-0 pb-0;
+		@apply text-lg text-neutral-content font-bold mb-0 pb-0;
 	}
 
 	section {
