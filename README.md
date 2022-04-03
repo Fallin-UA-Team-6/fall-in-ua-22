@@ -48,3 +48,6 @@ Built during the 2022 Fall In Hackathon by:
 * [Tejash Desai](https://github.com/Tejash241)
 * [Vital Boisset](https://github.com/vital-b)
 * [Xiao Grant](https://github.com/XiaoLGrant)
+
+###Licensing
+* (licensing info here)
