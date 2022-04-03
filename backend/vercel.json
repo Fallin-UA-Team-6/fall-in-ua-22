@@ -1,8 +1,0 @@
-{
-    "version": 2,
-    "cleanUrls": true,
-    "trailingSlash": false,
-    "rewrites": [{
-        "source": "/sf/:path*", "destination": "/api/:path*" 
-    }]
-}
