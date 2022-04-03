@@ -1,4 +1,5 @@
-# Safety Pin(g), pinging loved ones during times of emergency
+# Safety Pin(g)
+##pinging loved ones during times of emergency
 ### Overview
 The ongoing conflict in Ukraine has highlighted the need for a simple, secure way to communicate with friends and family. Safety Pin(g) aims to solve this issue by providing a way for users to check in with their loved ones and ensure they are safe. Users are able to check in with their personal network at customizable intervals. Users can also see time- and location-stamped check-ins from members within their network and receive notifications if someone has missed a check-in. Users can log in with their email and add their connections to groups so they can check in with multiple people at the same time.
 
