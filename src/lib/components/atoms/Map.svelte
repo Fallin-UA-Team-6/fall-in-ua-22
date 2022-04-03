@@ -47,7 +47,6 @@
 					'&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
 				maxZoom: 20
 			}).addTo(map);
-			L.marker(coordinates).addTo(map);
 		}
 	});
 
