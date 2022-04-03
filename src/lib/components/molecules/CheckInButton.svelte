@@ -35,7 +35,7 @@
 			),
 			...userGroups.docs.map(async (group) => {
 				const d = group.data();
-				return fire.storeModule.updateDoc(group.ref, {
+				await fire.storeModule.updateDoc(group.ref, {
 					...d,
 					members: [
 						...d.members.filter((m) => m.user !== fire.auth.currentUser.uid),
@@ -46,6 +46,7 @@
 							.map((m) => ({ ...m, latestCheckin: checkin }))
 					]
 				});
+                return "✅"
 			})
 		]);
         console.log(c)

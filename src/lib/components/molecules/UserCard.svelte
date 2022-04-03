@@ -27,7 +27,7 @@ import type { GroupMember } from '$lib/models';
                 }</h2>
             </div>
             <div class="flex gap-4 items-center">
-                <IconButton nomargin icon={TiPinOutline} on:click={() => shown = !shown}/>
+                <IconButton nomargin icon={TiPinOutline} on:click={() => shown = !shown} disabled={!member.latestCheckin}/>
                 <!-- <span class="text-sm">{member}</span> -->
             </div>
         </div>

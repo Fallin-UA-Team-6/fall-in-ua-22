@@ -29,17 +29,11 @@ class FirebaseApp {
 	initialize = async () => {
 		console.log("Initializing Firebase")
 		this.appModule = await import('firebase/app');
-
 		
 		if (!this.app) {
 			this.app = this.appModule.initializeApp(firebaseConfig);
 		}
 		if (browser) {
-			// mutableState.update((v) => ({
-			// 	...v,
-			// 	user: JSON.parse(localStorage.getItem('authState') ?? "")
-			// }));
-	
 			this.storeModule = await import('firebase/firestore');
 			this.store = this.storeModule.initializeFirestore(this.app, {});
 

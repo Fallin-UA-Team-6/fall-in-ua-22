@@ -3,9 +3,10 @@
 
 	export let icon: SvelteComponent;
 	export let nomargin: boolean | undefined;
+	export let disabled: boolean = false;
 </script>
 
-<button on:click class:nomargin>
+<button on:click class:nomargin {disabled} class:btn-disabled={disabled}>
 	<span class="h-5 w-5">
 		<svelte:component this={icon} />
 	</span>

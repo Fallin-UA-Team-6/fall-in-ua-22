@@ -39,9 +39,8 @@
 			window.location.href = '/';
 		}
 	}
-
 	async function joinGroup() {
-		fire.storeModule.updateDoc(groupRef, {
+		await fire.storeModule.updateDoc(groupRef, {
 			...group,
 			members: [
 				...group.members,
