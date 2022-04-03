@@ -17,17 +17,6 @@ View the timestamps and map locations of the members in your network.
 Invite others to join your network.
 [Insert image here]
 
-Check-in intervals can be customized as follows:
-* 6 hrs
-* 12 hrs
-* 18 hrs
-* 24 hrs
-* 2 days
-* 3 days
-* 5 days
-* 1 week
-* 2 weeks
-
 ### Technologies Utilized
 * [SvelteKit](https://svelte.dev/)
 * [Vercel](https://vercel.com/)
