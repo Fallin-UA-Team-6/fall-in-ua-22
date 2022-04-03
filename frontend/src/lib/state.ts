@@ -8,22 +8,29 @@ interface MutableAppState {
 	firestoreInitialized?: boolean;
 }
 
-export const mutableState = writable<MutableAppState>({});
-
-export const authState = readable<User | undefined>(undefined, (set) => {
-	fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
-		if (user) {
-			set(user);
-		} else {
-			set(undefined);
-		}
-	});
-});
-
 interface AppState {
 	mutable: MutableAppState;
 	user: User | undefined;
 }
+
+export const mutableState = writable<MutableAppState>({});
+
+export const authState = readable<User | undefined>(undefined, (set) => {
+	mutableState.subscribe((v) => {
+		if (v.firestoreInitialized) {
+			const unsub = fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
+				if (user) {
+					set(user);
+				} else {
+					set(undefined);
+				}
+			});
+			return unsub
+		}
+		return () => {}
+	})
+});
+
 
 export const state = derived<[typeof mutableState, typeof authState], AppState>(
 	[mutableState, authState],

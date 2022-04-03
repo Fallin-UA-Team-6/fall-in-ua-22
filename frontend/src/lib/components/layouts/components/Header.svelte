@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { Logo } from '$lib';
-	export let sidebarVisible: boolean;
+	import { getContext } from 'svelte';
+
+	const updateSidebar = getContext<(x: boolean) => void>('updateSidebar');
 </script>
 
 <header>
 	<div class="flex gap-2 items-center">
-		<span class="lg:hidden"><Logo on:click={() => sidebarVisible = true}/></span>
+		<span class="lg:hidden"><Logo on:click={() => updateSidebar(true)} /></span>
 		<h1>Safety Ping</h1>
 	</div>
 	<button> Logout </button>

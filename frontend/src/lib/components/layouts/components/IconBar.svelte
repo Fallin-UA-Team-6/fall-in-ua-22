@@ -6,8 +6,7 @@
 	import type { QueryDocumentSnapshot } from 'firebase/firestore';
 	import { Logo, IconButton } from '$lib';
 	import MdClose from 'svelte-icons/md/MdClose.svelte';
-
-	export let sidebarVisible: boolean;
+	import { getContext } from 'svelte';
 
 	let groups: QueryDocumentSnapshot<Group>[] = [];
 	$: if ($state?.mutable?.firestoreInitialized && $state?.user) {
@@ -24,13 +23,15 @@
 
 		groups = results.docs;
 	};
+
+	const updateSidebar = getContext<(x: boolean) => void>('updateSidebar');
 </script>
 
 <div
 	class="flex flex-col items-center w-16 pb-4 py-2 overflow-auto border-r border-gray-800 text-gray-500 row-span-2 bg-gray-700"
 >
 	<span class="lg:hidden mb-2">
-		<IconButton icon={MdClose} on:click={() => sidebarVisible = false}/>
+		<IconButton icon={MdClose} on:click={() => updateSidebar(false)} />
 	</span>
 	<Logo />
 

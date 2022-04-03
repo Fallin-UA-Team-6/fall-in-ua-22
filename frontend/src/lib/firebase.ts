@@ -56,7 +56,12 @@ class FirebaseApp {
 		window.addEventListener('message', console.log);
 
 		this.messageModule = await import('firebase/messaging');
-		this.messaging = this.messageModule.getMessaging(this.app);
+		try {
+			//@ts-expect-error it actually does and we lose track of an error context if we don't
+			this.messaging = await this.messageModule.getMessagingInWindow(this.app);
+		} catch {
+			console.log("Notifications are not available on this device!!")
+		}
 
 		if (this.auth.currentUser) {
 			await storeToken();

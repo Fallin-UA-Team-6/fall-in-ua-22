@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { SvelteComponent } from 'svelte';
+	import type { SvelteComponent } from 'svelte';
 
 	export let icon: SvelteComponent;
-	export let nomargin: boolean;
+	export let nomargin: boolean | undefined;
 </script>
 
 <button on:click class:nomargin>
