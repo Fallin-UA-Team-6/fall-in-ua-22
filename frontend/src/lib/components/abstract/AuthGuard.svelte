@@ -1,16 +1,9 @@
 <script lang="ts" context="module">
-    import { writable } from 'svelte/store';
-    import {fire} from '$lib/firebase'
-    import type { User } from 'firebase/auth';
-    const user = writable<User | undefined>(fire.auth?.currentUser);
-    fire?.authModule?.onAuthStateChanged(fire.auth, (event) => {
-        user.set(event)
-    });
-    
+	import { state } from '$lib/state';
 </script>
 
-{#if $user}
-    <slot name="authenticated" user={$user}/>
+{#if $state.user}
+	<slot name="authenticated" user={$state.user} />
 {:else}
-    <slot name="anonymous" />
+	<slot name="anonymous" />
 {/if}

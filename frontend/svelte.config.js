@@ -17,9 +17,7 @@ const config = {
 			register: true
 		},
 		vite: {
-			optimizeDeps: {
-
-			}
+			optimizeDeps: {}
 		}
 	}
 };

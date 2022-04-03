@@ -37,8 +37,10 @@
 	"dependencies": {
 		"@types/leaflet": "^1.7.9",
 		"@types/lodash.debounce": "^4.0.6",
+		"class-validator": "^0.13.2",
 		"daisyui": "^2.13.4",
 		"firebase": "^9.6.10",
+		"fireorm": "^0.23.3",
 		"leaflet": "^1.7.1",
 		"lodash.debounce": "^4.0.8",
 		"svelte-icons": "^2.1.0",

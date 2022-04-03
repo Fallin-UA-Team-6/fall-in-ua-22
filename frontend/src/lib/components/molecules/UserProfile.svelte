@@ -1,23 +1,17 @@
 <script lang="ts">
     import TiPinOutline from 'svelte-icons/ti/TiPinOutline.svelte'
-    import {slide} from "svelte/transition"
-
-    import {Avatar, IconButton, Map} from "$lib"
+    import {Avatar, IconButton} from "$lib"
 
     let shown = false;
-
     export let user;
 
     $: show = 'display: block';
-    let styles = {
-        'display': 'block'
-	};
-
+    
     console.log('show Profile');
     
 </script>
 
-<div class="dmodal" style="{user ? show : null}">
+<div class="" style="{user ? show : null}">
     <div class="dmodal-content">
         <div class="flex">
             <Avatar/>
@@ -32,12 +26,7 @@
 </div>
 
 <style lang="postcss">
-    .popup{
-        display: block;
-        position: absolute;
-        width: 80%;
-        height: 90%;
-    }
+    
     .dmodal {
         display: none;
         position: fixed; /* Stay in place */

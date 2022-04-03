@@ -4,12 +4,12 @@ const config = {
 	theme: {
 		extend: {
 			zIndex: {
-				'1000': '1000'
+				1000: '1000'
 			}
 		}
 	},
 
-	plugins: [require("daisyui")],
+	plugins: [require('daisyui')]
 };
 
 module.exports = config;

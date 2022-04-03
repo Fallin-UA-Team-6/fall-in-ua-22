@@ -13,8 +13,6 @@
     function viewProfile(){
         console.log('view profile')
         dispatch('viewProfile', user)
-
-
     }
 </script>
 
@@ -39,12 +37,6 @@
     </div>
 
 
-
-
-
-
-
-
     {#if shown}
         <div class="h-60 rounded overflow-hidden" transition:slide>
             <Map coordinates={[40.781840, -96.621860]}/>
@@ -52,19 +44,20 @@
     {/if}
 </section>
 
+
+
 <style lang="postcss">
     h2 {
         @apply text-lg text-primary-content font-bold mb-0 pb-0;
     }
 
     section {
-        @apply col-span-4;
-        md:col-span-2 bg-gray-700 flex flex-col p-4 rounded-lg rounded;
+        @apply col-span-4 md:col-span-2 bg-gray-700 flex flex-col p-4 rounded-lg rounded;
     }
 
     .timestamp {
         @apply text-2xs tracking-wider;
     }
+ </style>
 
 
-</style>
