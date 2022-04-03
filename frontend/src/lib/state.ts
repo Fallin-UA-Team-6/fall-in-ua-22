@@ -14,7 +14,21 @@ interface AppState {
 }
 
 export const mutableState = writable<MutableAppState>({});
+const mutableStateAuthSubscription = mutableState.subscribe((v) => {
+	if (v.firestoreInitialized) {
+		mutableStateAuthSubscription()
+		fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
+			if (user) {
+				mutableState.update(s => ({...s, user}));
+				localStorage.setItem("authState", JSON.stringify(user))		
+			} else {
+				mutableState.update(s => ({...s, user: undefined}));
+				localStorage.removeItem("authState")
+			}
+		});
+	}
 
+<<<<<<< HEAD
 mutableState.subscribe((v) => {
 	if (v.firestoreInitialized) {
 		const unsub = fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
@@ -33,6 +47,9 @@ mutableState.subscribe((v) => {
 	return () => {}
 })
 
+=======
+})
+>>>>>>> main
 
 export const state = derived<[typeof mutableState], AppState>(
 	[mutableState],

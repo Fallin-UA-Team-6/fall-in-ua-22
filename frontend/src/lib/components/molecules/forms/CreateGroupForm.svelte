@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { Input } from '$lib';
-import { fire } from '$lib/firebase';
+    import { fire } from '$lib/firebase';
 	import { createEventDispatcher } from 'svelte';
 
 	let name: string;
-	let members: string;
+	// let members: string;
     let photoUrl: string;
 
 	const dispatch = createEventDispatcher();
 
     async function createGroup(){
         const newGroupRef = await fire.storeModule.collection(fire.store, 'groups')
-        const resp = await fire.storeModule.addDoc(newGroupRef, {name, members: [members], photoUrl})
+        // members: [members],
+        const resp = await fire.storeModule.addDoc(newGroupRef, {name, photoUrl})
 
         dispatch('close', false)
     }
@@ -19,7 +20,7 @@ import { fire } from '$lib/firebase';
 
 <form>
 	<Input type="text" label="Group Name" bind:value={name} />
-	<Input type="text" label="members" bind:value={members} />
+	<!-- <Input type="text" label="members" bind:value={members} /> -->
 	<Input type="text" label="photoUrl" bind:value={photoUrl} />
 
 	<hr class="divider border-t-0 my-0" />

@@ -15,9 +15,21 @@
 <script lang="ts">
 	import '../app.css';
 	import GiClothespin from 'svelte-icons/gi/GiClothespin.svelte';
-	import { setContext } from 'svelte';
+	import { onMount, setContext } from 'svelte';
+	import { state } from '$lib/state';
 	export let fb: FbApp;
 	setContext('', fb);
+
+
+	onMount(
+		() =>
+			($state.mutable = {
+				...$state.mutable, 
+				user: localStorage.getItem('authState')
+				? JSON.parse(localStorage.getItem('authState'))
+				: undefined
+			})
+	);
 </script>
 
 <slot />
