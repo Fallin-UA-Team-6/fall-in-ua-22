@@ -43,15 +43,6 @@ class FirebaseApp {
 			this.store = this.storeModule.initializeFirestore(this.app, {});
 
 			this.authModule = await import('firebase/auth');
-<<<<<<< HEAD
-			this.auth = this.authModule.initializeAuth(this.app, {
-				persistence: browserLocalPersistence,
-				popupRedirectResolver: browserPopupRedirectResolver
-			});
-	
-
-			mutableState.update((ms) => ({ ...ms, user: this.auth.currentUser, firestoreInitialized: true }));
-=======
 			this.auth = this.authModule.getAuth(this.app);
 
 			mutableState.update((ms) => ({
@@ -59,7 +50,6 @@ class FirebaseApp {
 				user: this.auth.currentUser,
 				firestoreInitialized: true
 			}));
->>>>>>> main
 		}
 	};
 

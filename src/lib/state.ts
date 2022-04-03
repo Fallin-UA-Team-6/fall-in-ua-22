@@ -27,8 +27,8 @@ const mutableStateAuthSubscription = mutableState.subscribe((v) => {
 			}
 		});
 	}
+})
 
-<<<<<<< HEAD
 mutableState.subscribe((v) => {
 	if (v.firestoreInitialized) {
 		const unsub = fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
@@ -47,9 +47,6 @@ mutableState.subscribe((v) => {
 	return () => {}
 })
 
-=======
-})
->>>>>>> main
 
 export const state = derived<[typeof mutableState], AppState>(
 	[mutableState],
