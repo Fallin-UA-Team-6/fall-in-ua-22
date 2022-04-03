@@ -1,41 +1,26 @@
-import { fire } from '$lib/firebase';
-import type { Group, GroupMember } from '$lib/models';
+import { getClient } from '$lib/amqp';
+import pubKeys from '$lib/googlePubKeys';
+import type { RequestHandlerOutput } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-import { doc, getDoc } from "$lib/firebase/firestore";
+import {jwtVerify} from "jose";
 
-/** @type {import('./[id]').RequestHandler} */
-export async function get({ params }) {
-	// `params.id` comes from [id].js
-    const {id} = params
+export const post = async ({request}: RequestEvent): Promise<RequestHandlerOutput> => {
+    const body = await request.json();
+    const valid = await Promise.allSettled(pubKeys.map(async (k) => jwtVerify(body.token, await k)))
+    if (!valid.some(v => v.status === 'fulfilled')) {
+        return {
+            status: 403
+        }
+    }
+    const token = valid.find(v => v.status === "fulfilled")
+    if (token.status !== "fulfilled") throw new Error()
+    const {user_id} = token.value.payload
+    const client = await getClient()
 
-
-
-
-	const groupCollection = fire.storeModule.collection(fire.store, 'groups');
-	const groupQuery = fire.storeModule.query(
-		groupCollection,
-		fire.storeModule.where('members', 'array-contains', id)
-	);
-
-	const results = await fire.storeModule.getDocs<Group>(groupQuery);
-
-	const groups = results.docs;
-    const GroupMemberCollection = fire.storeModule.collection(fire.store, 'GroupMember');
-
-	const updatedGroups = groups.map((group: Group) => {
-		const member = group.members.find((member: GroupMember) => member.user.uid === id);
-        
-        const memberQuery = fire.storeModule.update<GroupMember>(
-            GroupMemberCollection,
-            fire.storeModule.where('user', 'array-contains', id)
-        )
-        // const groupQuery = fire.storeModule.query<Group>(
-        //     groupCollection,
-        //     fire.storeModule.where('members', 'array-contains', $state.user.uid)
-        // );
-	});
+    console.log(client.sendTask("main.check_in", [user_id, new Date(Date.now() + 1000 * 1).toISOString()], {}, user_id as string))
 
 	return {
-		status: 404
+		status: 200
 	};
-}
+};

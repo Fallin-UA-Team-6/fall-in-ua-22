@@ -40,8 +40,9 @@ class FirebaseApp {
 				persistence: browserLocalPersistence,
 				popupRedirectResolver: browserPopupRedirectResolver
 			});
+	
 
-			mutableState.update((ms) => ({ ...ms, firestoreInitialized: true }));
+			mutableState.update((ms) => ({ ...ms, user: this.auth.currentUser, firestoreInitialized: true }));
 		}
 	};
 
@@ -77,7 +78,7 @@ class FirebaseApp {
 					await Promise.all([
 						this.storeModule.updateDoc(first.ref, {
 							uid: this.auth.currentUser.uid,
-							tokens: allTokens
+							tokens: [token, ...allTokens]
 						}),
 						rest.map((rd) => this.storeModule.deleteDoc(rd.ref))
 					]);

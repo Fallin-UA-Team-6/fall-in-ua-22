@@ -6,36 +6,37 @@ import type { Group } from './models';
 interface MutableAppState {
 	selectedGroup?: Group;
 	firestoreInitialized?: boolean;
+	user?: User | undefined;
 }
 
 interface AppState {
 	mutable: MutableAppState;
-	user: User | undefined;
 }
 
 export const mutableState = writable<MutableAppState>({});
 
-export const authState = readable<User | undefined>(undefined, (set) => {
-	mutableState.subscribe((v) => {
-		if (v.firestoreInitialized) {
-			const unsub = fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
-				if (user) {
-					set(user);
-				} else {
-					set(undefined);
+mutableState.subscribe((v) => {
+	if (v.firestoreInitialized) {
+		const unsub = fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
+			if (user) {
+				// i.e. user is different
+				if (user.uid !== v.user.uid) {
+					mutableState.update(s => ({...s, user}));
 				}
-			});
-			return unsub
-		}
-		return () => {}
-	})
-});
+			
+			} else {
+				mutableState.update(s => ({...s, user: undefined}));
+			}
+		});
+		return unsub
+	}
+	return () => {}
+})
 
 
-export const state = derived<[typeof mutableState, typeof authState], AppState>(
-	[mutableState, authState],
-	([mutable, user]) => ({
+export const state = derived<[typeof mutableState], AppState>(
+	[mutableState],
+	([mutable]) => ({
 		mutable,
-		user
 	})
 );
