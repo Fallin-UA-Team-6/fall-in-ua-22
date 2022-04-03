@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { setContext } from 'svelte';
+import CreateGroup from '../molecules/CreateGroup.svelte';
 
 	import { IconBar, Header } from './components';
 
@@ -16,6 +17,7 @@
 		<label for="my-drawer-2" class="drawer-overlay" />
 
 		<IconBar />
+		<CreateGroup />
 	</div>
 
 	<section class="drawer-content flex flex-col justify-self-stretch">

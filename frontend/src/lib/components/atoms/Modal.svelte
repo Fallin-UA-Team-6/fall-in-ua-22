@@ -24,7 +24,7 @@
 			<h2>
 				{title ?? ''}
 			</h2>
-			<slot name="body" />
+			<slot  />
 			{#if $$slots.actions}
 				<div class="modal-action">
 					<slot name="actions" {close} />
