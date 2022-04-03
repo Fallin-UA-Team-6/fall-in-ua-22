@@ -7,24 +7,9 @@
 	import { Logo, IconButton, CreateGroup } from '$lib';
 	import MdClose from 'svelte-icons/md/MdClose.svelte';
 	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
 
-	let groups: Group[] = [];
-	$: if ($state?.mutable?.firestoreInitialized && $state?.mutable?.user) {
-		fetchGroups();
-	}
-
-	const fetchGroups = async () => {
-		// const g = fire.storeModule.collection(fire.store, "groups", "FAq1rUwgyZCUKHw1COjz", "members")
-
-		const results = await fire.storeModule.getDocs(
-			fire.storeModule.query(fire.storeModule.collection(fire.store, 'groups'), fire.storeModule.where("memberIds", "array-contains", $state.mutable.user.uid))
-		);
-
-		console.log(results);
-
-		groups = results.docs.map(d => d.data()) as QueryDocumentSnapshot<Group>[];
-	};
-
+	const groups = getContext<Writable<Group[]>>('groups');
 	const updateSidebar = getContext<(x: boolean) => void>('updateSidebar');
 </script>
 
@@ -38,10 +23,14 @@
 
 	<div class="divider my-2 mx-2" />
 	<div class="flex flex-col items-center flex-1">
-		{#each groups as group}
-		<div class="w-full flex justify-center py-2" class:bg-neutral-content={group.name === $state.mutable?.selectedGroup?.name} on:click={() => $mutableState.selectedGroup = group}>
-			<img class="rounded-full w-2/3" src={group.photoUrl} alt={group.name} title={group.name}/>
-		</div>
+		{#each $groups as group}
+			<div
+				class="w-full flex justify-center py-2"
+				class:bg-neutral-content={group.name === $state.mutable?.selectedGroup?.name}
+				on:click={() => ($mutableState.selectedGroup = group)}
+			>
+				<img class="rounded-full w-2/3" src={group.photoUrl.toString()} alt={group.name} title={group.name} />
+			</div>
 		{/each}
 	</div>
 	<div>

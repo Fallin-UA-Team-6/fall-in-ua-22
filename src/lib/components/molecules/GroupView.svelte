@@ -1,18 +1,24 @@
 <script lang="ts">
-import { fire } from '$lib/firebase';
-import { state } from '$lib/state';
+	import type { Group } from '$lib/models';
 
-	import { onMount } from 'svelte';
-    import UserCard from './UserCard.svelte';
+	import UserCard from './UserCard.svelte';
+	export let group: Group;
 
-	onMount(async () => {
-        
-    });
 
-    const members = $state.mutable.selectedGroup.members
-    $: console.log(members)
+    async function copyInviteLink() {
+        navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/invite/${group.id}`)
+    }
 </script>
 
-{#each members as member}
-    <UserCard {member}/>
+<div class="col-span-4 flex justify-between px-4">
+	<div>
+		<h2 class="font-bold text-xl">{group.name}</h2>
+		<p>{group.members.length} member{group.members.length > 1 ? 's' : ''}</p>
+	</div>
+    <div>
+        <button class="btn btn-outline" on:click={copyInviteLink}>Copy invite link</button>
+    </div>
+</div>
+{#each group.members as member}
+	<UserCard {member} />
 {/each}
