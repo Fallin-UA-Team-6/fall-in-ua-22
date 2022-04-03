@@ -18,27 +18,33 @@
     }
 </script>
 
-<section class="space-y-4 h-auto inline min-h-0" on:click={viewProfile}>
-    <div class="h-20 flex justify-between items-start">
-        <div class="flex">
-            <Avatar/>
-            <h2>
-                {
+<section class="space-y-4 h-auto inline min-h-0 " on:click={viewProfile}>
+    <div class="h-24 flex justify-between items-start">
+        <div class="flex flex-col h-full justify-between">
+            <div class="flex">
+                <Avatar/>
+                <h2>{
                     user.name
-                }
-            </h2>
-            
+                }</h2>
+            </div>
+            <div class="flex gap-4 items-center">
+                <IconButton nomargin icon={TiPinOutline} on:click={() => shown = !shown}/>
+                <span class="text-sm">{user.location}</span>
+            </div>
         </div>
         <div class="flex flex-col gap-2 items-end justify-between h-full">
-            <span class="timestamp">Last Check in: 
-                {user.checkins.last}
-            </span>
-            <span class="timestamp">Next Check in: 
-                {user.checkins.next}
-            </span>
-            <IconButton nomargin icon={TiPinOutline} on:click={() => shown = !shown}/>
+            <span class="timestamp">Last Check in:<br/> {user.checkins.last}</span>
+            <span class="timestamp">Next Check in:<br/> {user.checkins.next}</span>
         </div>
     </div>
+
+
+
+
+
+
+
+
     {#if shown}
         <div class="h-60 rounded overflow-hidden" transition:slide>
             <Map coordinates={[40.781840, -96.621860]}/>
