@@ -1,7 +1,7 @@
 import type { initializeApp } from 'firebase/app';
 import type { Messaging } from 'firebase/messaging';
 import { browser } from '$app/env';
-import { browserLocalPersistence, browserPopupRedirectResolver, type Auth } from 'firebase/auth';
+import type { Auth } from 'firebase/auth';
 import { mutableState } from '$lib/state';
 import type { Firestore } from 'firebase/firestore';
 
@@ -28,20 +28,28 @@ class FirebaseApp {
 
 	initialize = async () => {
 		this.appModule = await import('firebase/app');
+
+		
 		if (!this.app) {
 			this.app = this.appModule.initializeApp(firebaseConfig);
 		}
 		if (browser) {
+			// mutableState.update((v) => ({
+			// 	...v,
+			// 	user: JSON.parse(localStorage.getItem('authState') ?? "")
+			// }));
+	
 			this.storeModule = await import('firebase/firestore');
 			this.store = this.storeModule.initializeFirestore(this.app, {});
 
 			this.authModule = await import('firebase/auth');
-			this.auth = this.authModule.initializeAuth(this.app, {
-				persistence: browserLocalPersistence,
-				popupRedirectResolver: browserPopupRedirectResolver
-			});
+			this.auth = this.authModule.getAuth(this.app);
 
-			mutableState.update((ms) => ({ ...ms, firestoreInitialized: true }));
+			mutableState.update((ms) => ({
+				...ms,
+				user: this.auth.currentUser,
+				firestoreInitialized: true
+			}));
 		}
 	};
 
@@ -77,7 +85,7 @@ class FirebaseApp {
 					await Promise.all([
 						this.storeModule.updateDoc(first.ref, {
 							uid: this.auth.currentUser.uid,
-							tokens: allTokens
+							tokens: [token, ...allTokens]
 						}),
 						rest.map((rd) => this.storeModule.deleteDoc(rd.ref))
 					]);
@@ -102,7 +110,7 @@ class FirebaseApp {
 			await storeToken();
 		} else {
 			console.debug('User not signed in');
-			let unsub = this.auth.onAuthStateChanged((user) => {
+			const unsub = this.auth.onAuthStateChanged((user) => {
 				if (user) {
 					unsub();
 					storeToken();

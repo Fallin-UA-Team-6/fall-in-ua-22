@@ -23,7 +23,7 @@
 <main>
 	<button class="btn btn-primary" on:click={signIn}>Login</button>
     <button class="btn btn-error" on:click={logout}> Logout </button>
-    {JSON.stringify($state.user)}
+    {JSON.stringify($state.mutable.user)}
 </main>
 
 <style lang="postcss">

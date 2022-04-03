@@ -17,7 +17,7 @@
 		const groupCollection = fire.storeModule.collection(fire.store, 'groups');
 		const groupQuery = fire.storeModule.query<Group>(
 			groupCollection,
-			fire.storeModule.where('members', 'array-contains', $state.user.uid)
+			fire.storeModule.where('members', 'array-contains', $state.mutable.user.uid)
 		);
 		const results = await fire.storeModule.getDocs<Group>(groupQuery);
 

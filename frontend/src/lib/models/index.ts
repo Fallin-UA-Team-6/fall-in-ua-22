@@ -15,7 +15,7 @@ export class GroupMember {
 export class Group {
 	id: string;
 
-	members: Array<GroupMember>;
+	members?: Array<GroupMember>;
 
 	name: string;
 	photoUrl: URL;
