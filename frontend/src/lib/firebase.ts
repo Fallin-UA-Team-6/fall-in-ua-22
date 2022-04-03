@@ -1,7 +1,7 @@
 import type { initializeApp } from 'firebase/app';
 import type { Messaging } from 'firebase/messaging';
 import { browser } from '$app/env';
-import type { Auth } from 'firebase/auth';
+import { browserLocalPersistence, browserPopupRedirectResolver, type Auth } from 'firebase/auth';
 import { mutableState } from '$lib/state';
 import type { Firestore } from 'firebase/firestore';
 
@@ -36,7 +36,10 @@ class FirebaseApp {
 			this.store = this.storeModule.initializeFirestore(this.app, {});
 
 			this.authModule = await import('firebase/auth');
-			this.auth = this.authModule.initializeAuth(this.app);
+			this.auth = this.authModule.initializeAuth(this.app, {
+				persistence: browserLocalPersistence,
+				popupRedirectResolver: browserPopupRedirectResolver
+			});
 
 			mutableState.update((ms) => ({ ...ms, firestoreInitialized: true }));
 		}
@@ -52,8 +55,6 @@ class FirebaseApp {
 
 			console.log(token);
 		};
-
-		window.addEventListener('message', console.log);
 
 		this.messageModule = await import('firebase/messaging');
 		try {

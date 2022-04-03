@@ -1,31 +1,30 @@
 <script lang="ts">
-	import { writable, readable, derived } from 'svelte/store';
+	import IconButton from '$lib/components/atoms/IconButton.svelte';
+	import FaGoogle from 'svelte-icons/fa/FaGoogle.svelte';
 
-	const write = writable<string>('');
-	function updateMyStore() {
-		write.update((v) => `${v} 1`);
+	import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+	import { fire } from '$lib/firebase';
+	import { state } from '$lib/state';
+	const provider = new GoogleAuthProvider();
+
+	let signIn;
+	$: if ($state.mutable.firestoreInitialized) {
+		signIn = async () => {
+			const result = await signInWithPopup(fire.auth, provider);
+		};
 	}
 
-	const read = readable(0, (set) => {
-		let value = 0;
-		const interval = setInterval(() => set(value++), 1000);
-
-		return () => clearInterval(interval);
-	});
-
-	const d = derived([write, read], ([w, r]) => ({
-		w,
-		r
-	}));
+    async function logout() {
+		await fire.authModule.signOut(fire.auth);
+		// goto('/login');
+	}
 </script>
 
 <main>
-	<button on:click={updateMyStore} class="btn">Update Store</button>
+	<button class="btn btn-primary" on:click={signIn}>Login</button>
+    <button class="btn btn-error" on:click={logout}> Logout </button>
+    {JSON.stringify($state.user)}
 </main>
-
-<p>w: {$write}</p>
-<p>r: {$read}</p>
-<p>d: {JSON.stringify($d)}</p>
 
 <style lang="postcss">
 	main {

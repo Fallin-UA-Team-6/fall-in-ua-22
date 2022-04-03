@@ -1,8 +1,16 @@
 <script lang="ts">
+import { goto } from '$app/navigation';
+
 	import { Logo } from '$lib';
+import { fire } from '$lib/firebase';
 	import { getContext } from 'svelte';
 
 	const updateSidebar = getContext<(x: boolean) => void>('updateSidebar');
+
+	async function logout() {
+		await fire.authModule.signOut(fire.auth)
+		goto("/login")
+	}
 </script>
 
 <header>
@@ -10,7 +18,7 @@
 		<span class="lg:hidden"><Logo on:click={() => updateSidebar(true)} /></span>
 		<h1>Safety Ping</h1>
 	</div>
-	<button> Logout </button>
+	<button on:click={logout}> Logout </button>
 </header>
 
 <style lang="postcss">
