@@ -4,7 +4,7 @@
 	import { fire } from '$lib/firebase';
 	import type { CheckIn, Group } from '$lib/models';
 	import type { CollectionReference } from 'firebase/firestore';
-	import { state } from '$lib/state';
+	import { mutableState, state } from '$lib/state';
 
 	async function checkIn() {
 		//TODO: Get all groups
@@ -46,13 +46,23 @@
 							.map((m) => ({ ...m, latestCheckin: checkin }))
 					]
 				});
-                return "✅"
+				return '✅';
 			})
 		]);
-        console.log(c)
-        alert("You have checked in!");
-        // window.location.reload()
-
+		console.log(c);
+		alert('You have checked in!');
+		if ($state.mutable.selectedGroup) {
+			const m = $state.mutable.selectedGroup.members;
+			console.log(m);
+			$mutableState.selectedGroup.members = m.map((_) => {
+				if (_.user === fire.auth.currentUser.uid) {
+					console.log('We do be out here');
+					_.latestCheckin = { id: _.latestCheckin.id, ...checkin };
+				}
+				return _;
+			});
+		}
+		// window.location.reload()
 	}
 </script>
 

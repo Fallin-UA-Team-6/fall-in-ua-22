@@ -6,15 +6,18 @@
 	import { getContext } from 'svelte';
 
 	const updateSidebar = getContext<(x: boolean) => void>('updateSidebar');
-	export let groups;
+
 	let group: Group | undefined;
-	$: group = $state?.mutable.selectedGroup;
+	$: {
+		group = $state?.mutable.selectedGroup;
+		console.log(group);
+	}
 </script>
 
 <div class="flex flex-col flex-grow overflow-auto">
 	<div class="grid grid-cols-4 gap-6 items-start">
 		{#if group}
-			<GroupView {group}/>
+			<GroupView {group} />
 		{:else}
 			<div class="col-span-4 py-16">
 				<Spinner />
