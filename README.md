@@ -1,4 +1,4 @@
-![Safety Ping](header.jpg)
+![Safety Ping](Header.jpg)
 # Safety Pin(g)
 ## pinging loved ones during times of emergency
 ### Overview
