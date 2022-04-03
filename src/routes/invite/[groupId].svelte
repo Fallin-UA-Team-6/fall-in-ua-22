@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { fire } from '$lib/firebase';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { state } from '$lib/state';
-import { Avatar } from '$lib';
+	import { Avatar, CenteredCardLayout, Spinner } from '$lib';
+	import type { DocumentReference } from 'firebase/firestore';
+	import type { Group } from '$lib/models';
+
 	// $page.params => { groupId: string }
 	let mounted = false;
 
@@ -14,61 +16,71 @@ import { Avatar } from '$lib';
 	onMount(async () => {
 		mounted = true;
 	});
-    let group = null
+	let group: null | Group = null;
+	let groupRef: DocumentReference;
 
 	async function checkAuth() {
-		console.log('checking auth');
 		if ($state.mutable.user) {
-			const groupCollection = await fire.storeModule.collection(fire.store, 'groups');
-			const groupQuery = fire.storeModule.query(
-				groupCollection,
-				fire.storeModule.where('id', '==', $page.params.groupId)
-			);
-			console.log('checking auth');
-			const foundGroup = await fire.storeModule.getDocs(groupQuery);
-			if (foundGroup && foundGroup.docs && foundGroup.docs.length) {
-				console.log(foundGroup);
-                group = foundGroup.data()
-                console.log(group)
+			const ref = fire.storeModule.doc(fire.store, 'groups', $page.params.groupId);
+			const foundGroup = await fire.storeModule.getDoc(ref);
+
+			if (foundGroup.exists()) {
+				group = foundGroup.data() as Group;
+
+				if (group.members.some((m) => m?.user === $state?.mutable?.user?.uid)) {
+					window.location.href = '/app';
+				}
+
+				groupRef = ref;
 			} else {
-				goto('/');
+				window.location.href = '/';
 			}
 		} else {
-			goto('/');
+			window.location.href = '/';
 		}
 	}
 
-    async function joinGroup(){
-
-    }
+	async function joinGroup() {
+		fire.storeModule.updateDoc(groupRef, {
+			...group,
+			members: [
+				...group.members,
+				{
+					user: fire.auth.currentUser.uid,
+					latestCheckin: null,
+					name: fire.auth.currentUser.displayName,
+					avatar: fire.auth.currentUser.photoURL
+				}
+			],
+			memberIds: [
+				...group.memberIds,
+				fire.auth.currentUser.uid
+			]
+		});
+		window.location.href = "/app"
+	}
 </script>
 
-<main>
-	<section class="space-y-4 h-auto inline min-h-0 ">
-		<div class="h-24 flex justify-between items-start">
-			<div class="flex flex-col h-full justify-between">
-				<div class="flex">
-					<Avatar />
-					<h2>{group?.name}</h2>
-                    <button type="button" class="btn btn-sm" on:click={joinGroup}
-                        >Join Group</button
-                    >
-				</div>
-			</div>
-		</div>
-	</section>
-</main>
+<CenteredCardLayout>
+	{#if group}
+		<div
+			class="rounded-lg w-44 h-44 mb-2 bg-center bg-contain"
+			style="background-image: url('{group.photoUrl}')"
+		/>
+		<h2>{group?.name}</h2>
+		<div class="divider" />
+		<button type="button" class="btn btn-primary btn-lg" on:click={joinGroup}>Join Group</button>
+	{:else}
+		<Spinner />
+	{/if}
+</CenteredCardLayout>
 
 <style lang="postcss">
 	h2 {
-		@apply text-lg text-primary-content font-bold mb-0 pb-0;
+		@apply text-2xl text-primary-content font-bold mb-0 pb-0;
 	}
 
 	section {
-		@apply col-span-4 md:col-span-2 bg-gray-700 flex flex-col p-4 rounded-lg rounded;
-	}
-
-	.timestamp {
-		@apply text-2xs tracking-wider;
+		@apply col-span-4 md:col-span-2 bg-gray-700 flex flex-col p-4 rounded-lg;
 	}
 </style>

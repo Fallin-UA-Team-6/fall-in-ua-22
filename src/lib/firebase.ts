@@ -27,6 +27,7 @@ class FirebaseApp {
 	messaging: Messaging;
 
 	initialize = async () => {
+		console.log("Initializing Firebase")
 		this.appModule = await import('firebase/app');
 
 		

@@ -4,13 +4,13 @@
 
     async function checkin() {
         const token = await fire.auth.currentUser.getIdToken()
-        const r = await fetch("/api/checkin", {
+        await fetch("/api/checkin", {
             method: "POST",
             body: JSON.stringify({
                 token
             })
         }).then(r => r.text())
-        console.log(r)
+        
     }
 </script>
 

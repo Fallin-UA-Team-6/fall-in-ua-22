@@ -1,27 +1,28 @@
 <script lang="ts">
-	import { state } from '$lib/state';
+	import { mutableState, state } from '$lib/state';
 	import { fire } from '$lib/firebase';
 
 	import type { Group } from '$lib/models';
 	import type { QueryDocumentSnapshot } from 'firebase/firestore';
-	import { Logo, IconButton } from '$lib';
+	import { Logo, IconButton, CreateGroup } from '$lib';
 	import MdClose from 'svelte-icons/md/MdClose.svelte';
 	import { getContext } from 'svelte';
 
-	let groups: QueryDocumentSnapshot<Group>[] = [];
-	$: if ($state?.mutable?.firestoreInitialized && $state?.user) {
+	let groups: Group[] = [];
+	$: if ($state?.mutable?.firestoreInitialized && $state?.mutable?.user) {
 		fetchGroups();
 	}
 
 	const fetchGroups = async () => {
-		const groupCollection = fire.storeModule.collection(fire.store, 'groups');
-		const groupQuery = fire.storeModule.query<Group>(
-			groupCollection,
-			fire.storeModule.where('members', 'array-contains', $state.mutable.user.uid)
-		);
-		const results = await fire.storeModule.getDocs<Group>(groupQuery);
+		// const g = fire.storeModule.collection(fire.store, "groups", "FAq1rUwgyZCUKHw1COjz", "members")
 
-		groups = results.docs;
+		const results = await fire.storeModule.getDocs(
+			fire.storeModule.query(fire.storeModule.collection(fire.store, 'groups'), fire.storeModule.where("memberIds", "array-contains", $state.mutable.user.uid))
+		);
+
+		console.log(results);
+
+		groups = results.docs.map(d => d.data()) as QueryDocumentSnapshot<Group>[];
 	};
 
 	const updateSidebar = getContext<(x: boolean) => void>('updateSidebar');
@@ -35,8 +36,15 @@
 	</span>
 	<Logo />
 
-	<div class="divider my-0 mx-2" />
-	{#each groups as group}
-		{group.name}
-	{/each}
+	<div class="divider my-2 mx-2" />
+	<div class="flex flex-col items-center flex-1">
+		{#each groups as group}
+		<div class="w-full flex justify-center py-2" class:bg-neutral-content={group.name === $state.mutable?.selectedGroup?.name} on:click={() => $mutableState.selectedGroup = group}>
+			<img class="rounded-full w-2/3" src={group.photoUrl} alt={group.name} title={group.name}/>
+		</div>
+		{/each}
+	</div>
+	<div>
+		<CreateGroup />
+	</div>
 </div>

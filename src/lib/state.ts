@@ -1,3 +1,4 @@
+import {browser} from "$app/env";
 import type { User } from 'firebase/auth';
 import { derived, readable, writable } from 'svelte/store';
 import { fire } from './firebase';
@@ -13,8 +14,14 @@ interface AppState {
 	mutable: MutableAppState;
 }
 
-export const mutableState = writable<MutableAppState>({});
-const mutableStateAuthSubscription = mutableState.subscribe((v) => {
+console.log( browser && localStorage.getItem("authState") ? JSON.parse(localStorage.getItem("authState")) : undefined)
+
+export const mutableState = writable<MutableAppState>({
+	user: browser && localStorage.getItem("authState") ? JSON.parse(localStorage.getItem("authState")) : undefined
+});
+
+
+let mutableStateAuthSubscription = mutableState.subscribe((v) => {
 	if (v.firestoreInitialized) {
 		mutableStateAuthSubscription()
 		fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
@@ -27,26 +34,8 @@ const mutableStateAuthSubscription = mutableState.subscribe((v) => {
 			}
 		});
 	}
-})
 
-mutableState.subscribe((v) => {
-	if (v.firestoreInitialized) {
-		const unsub = fire.authModule.onAuthStateChanged(fire.auth, async (user) => {
-			if (user) {
-				// i.e. user is different
-				if (user.uid !== v.user.uid) {
-					mutableState.update(s => ({...s, user}));
-				}
-			
-			} else {
-				mutableState.update(s => ({...s, user: undefined}));
-			}
-		});
-		return unsub
-	}
-	return () => {}
 })
-
 
 export const state = derived<[typeof mutableState], AppState>(
 	[mutableState],
