@@ -46,11 +46,45 @@ class FirebaseApp {
 	};
 
 	initializeMessaging = async () => {
+		console.debug('Attempting to initialize messaging');
 		const storeToken = async () => {
 			const token = await this.messageModule.getToken(this.messaging, {
 				vapidKey:
 					'BNrLsf72E_Rtqu1aMTg6aI_P4ZbBQHb0It5JY40Xbxl5taSZI8omJmmvKmniujp6m5gQzercjk5RWN3K8cafY_w'
 			});
+
+			if (!localStorage.getItem('token-on-server')) {
+				const tokenCollection = this.storeModule.collection(this.store, 'user_tokens');
+
+				const tokenDocQuery = this.storeModule.query(
+					tokenCollection,
+					this.storeModule.where('uid', '==', this.auth.currentUser.uid)
+				);
+
+				const tokenDocs = await this.storeModule.getDocs(tokenDocQuery);
+				if (tokenDocs.size === 0) {
+					console.warn('No token document found, creating one...');
+					await this.storeModule.addDoc(tokenCollection, {
+						uid: this.auth.currentUser.uid,
+						tokens: [token]
+					});
+				} else if (tokenDocs.size) {
+					const [first, ...rest] = tokenDocs.docs;
+
+					const allTokens = [];
+					tokenDocs.forEach((td) => allTokens.push(...td.get('tokens')));
+
+					await Promise.all([
+						this.storeModule.updateDoc(first.ref, {
+							uid: this.auth.currentUser.uid,
+							tokens: allTokens
+						}),
+						rest.map((rd) => this.storeModule.deleteDoc(rd.ref))
+					]);
+				}
+				localStorage.setItem('token-on-server', 'true');
+			}
+
 			console.log(this.messageModule.onMessage(this.messaging, (p) => console.log({ p })));
 
 			console.log(token);
@@ -58,16 +92,23 @@ class FirebaseApp {
 
 		this.messageModule = await import('firebase/messaging');
 		try {
-			//@ts-expect-error it actually does and we lose track of an error context if we don't
-			this.messaging = await this.messageModule.getMessagingInWindow(this.app);
-		} catch {
-			console.log("Notifications are not available on this device!!")
+			this.messaging = await this.messageModule.getMessaging(this.app);
+		} catch (e) {
+			console.error(e);
+			console.log('Notifications are not available on this device!!');
 		}
 
 		if (this.auth.currentUser) {
 			await storeToken();
 		} else {
-			// this.auth.onAuthStateChanged(() => {});
+			console.debug('User not signed in');
+			let unsub = this.auth.onAuthStateChanged((user) => {
+				if (user) {
+					unsub();
+					storeToken();
+					console.log('Token fetched!');
+				}
+			});
 		}
 	};
 }
