@@ -43,7 +43,7 @@ Check-in intervals can be customized as follows:
 ### Collaborators
 Built during the 2022 Fall In Hackathon by:
 * [Brian Donald](https://github.com/0c370t)
-* [Ian Tran](https://github.com/idtran/idtran)
+* [Ian Tran](https://github.com/idtran)
 * [Leeia Isabelle](https://github.com/Leeiaisabelle)
 * [Sir David Timothy Wayne, Jr.](https://github.com/Wolverine971)
 * [Tejash Desai](https://github.com/Tejash241)
