@@ -1,5 +1,5 @@
 <script lang="ts">
-	import GiClothespin from 'svelte-icons/gi/GiClothespin.svelte';
+	import TiPin from 'svelte-icons/ti/TiPin.svelte';
 	import { Portal } from '$lib/components/abstract';
 	import { fire } from '$lib/firebase';
 	import type { CheckIn, Group } from '$lib/models';
@@ -73,7 +73,7 @@
 	>
 		<button class="btn btn-lg btn-primary rounded-full w-full h-full" on:click={checkIn}>
 			<span class="h-8 w-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-				<GiClothespin />
+				<TiPin />
 			</span>
 		</button>
 	</div>

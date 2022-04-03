@@ -36,7 +36,7 @@
 				window.location.href = '/';
 			}
 		} else {
-			window.location.href = '/';
+			window.location.href = '/login?next=' + encodeURI("/invite/" + $page.params.groupId);
 		}
 	}
 	async function joinGroup() {
@@ -76,7 +76,7 @@
 
 <style lang="postcss">
 	h2 {
-		@apply text-2xl text-primary-content font-bold mb-0 pb-0;
+		@apply text-2xl text-primary font-bold mb-0 pb-0;
 	}
 
 	section {

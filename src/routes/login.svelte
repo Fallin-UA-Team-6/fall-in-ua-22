@@ -12,14 +12,32 @@
 	let signIn;
 
 	$: if ($state.mutable.user) {
-		console.log($state.mutable.user);
-		window.location.href = "/app"
+		if (window.location.search.includes('next=')) {
+				const next = window.location.search
+					.substring(1)
+					.split('&')
+					.map<string[]>(v => v.split("="))
+					.find(([key, value]) => key === 'next')[1];
+				window.location.href = decodeURI(next)
+		} else {
+			window.location.href = '/app';
+		}
+
 	}
 
 	$: if ($state.mutable.firestoreInitialized) {
 		signIn = async () => {
 			const result = await signInWithPopup(fire.auth, provider);
-			goto('/app');
+			if (window.location.search.includes('next=')) {
+				const next = window.location.search
+					.substring(1)
+					.split('&')
+					.map<string[]>(v => v.split("="))
+					.find(([key, value]) => key === 'next')[1];
+				goto(decodeURI(next))
+			} else {
+				goto('/app');
+			}
 		};
 	}
 </script>

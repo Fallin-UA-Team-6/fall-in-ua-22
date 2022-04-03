@@ -23,15 +23,22 @@
 
 	<div class="divider my-2 mx-2" />
 	<div class="flex flex-col items-center flex-1">
-		{#each $groups as group}
-			<div
-				class="w-full flex justify-center py-2"
-				class:bg-neutral-content={group.name === $state.mutable?.selectedGroup?.name}
-				on:click={() => ($mutableState.selectedGroup = group)}
-			>
-				<img class="rounded-full w-2/3" src={group.photoUrl.toString()} alt={group.name} title={group.name} />
-			</div>
-		{/each}
+		{#if $groups}
+			{#each $groups as group}
+				<div
+					class="w-full flex justify-center py-2"
+					class:bg-neutral-content={group.name === $state.mutable?.selectedGroup?.name}
+					on:click={() => ($mutableState.selectedGroup = group)}
+				>
+					<img
+						class="rounded-full w-2/3"
+						src={group.photoUrl.toString()}
+						alt={group.name}
+						title={group.name}
+					/>
+				</div>
+			{/each}
+		{/if}
 	</div>
 	<div>
 		<CreateGroup />

@@ -10,14 +10,12 @@
 	import { writable } from 'svelte/store';
 	import { setContext } from 'svelte';
 
-	let groups = writable<Group[]>([]);
-	$: if ($state?.mutable?.firestoreInitialized && $state?.mutable?.user && $groups.length === 0) {
+	let groups = writable<Group[]>(undefined);
+	$: if ($state?.mutable?.firestoreInitialized && $state?.mutable?.user && ($groups?.length ?? 0) === 0) {
 		fetchGroups();
 	}
 
 	const fetchGroups = async () => {
-		// const g = fire.storeModule.collection(fire.store, "groups", "FAq1rUwgyZCUKHw1COjz", "members")
-
 		const results = await fire.storeModule.getDocs(
 			fire.storeModule.query(
 				fire.storeModule.collection(fire.store, 'groups'),
@@ -25,18 +23,15 @@
 			)
 		);
 
-		
-
 		$groups = results.docs.map((d) => {
 			const data = d.data();
 			return {
 				...data,
 				id: d.id
-			}
+			};
 		}) as Group[];
 
-
-		$mutableState.selectedGroup = $groups[0]
+		$mutableState.selectedGroup = $groups?.[0];
 	};
 	setContext('groups', groups);
 </script>

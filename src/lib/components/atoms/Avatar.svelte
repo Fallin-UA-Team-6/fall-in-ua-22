@@ -4,7 +4,7 @@
 </script>
 
 <div class="avatar online mr-4 aspect-square">
-	<div class="w-8 rounded-full">
+	<div class="w-8 h-8 rounded-full">
 		<img {src} alt="some avatar" />
 	</div>
 </div>
