@@ -41,4 +41,4 @@ Built during the 2022 Fall In Hackathon by:
 * [Xiao Grant](https://github.com/XiaoLGrant)
 
 ### Licensing
-* (licensing info here)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
